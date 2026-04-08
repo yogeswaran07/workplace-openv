@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openenv-workplace-policy"
+version = "1.0.0"
+description = "OpenEnv environment for workplace policy compliance decisions"
+requires-python = ">=3.10"
+dependencies = [
+    "openenv-core[core]>=0.2.3",
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "pydantic>=2.0",
+    "openai>=1.50.0",
+    "httpx>=0.27.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "ruff>=0.8.0",
+]
+
+[project.scripts]
+server = "workplace_policy_env.server.app:main"
+
+[tool.setuptools]
+include-package-data = true
+packages = ["workplace_policy_env", "workplace_policy_env.server"]
+package-dir = { "workplace_policy_env" = ".", "workplace_policy_env.server" = "server" }
+
+[tool.ruff]
+line-length = 100

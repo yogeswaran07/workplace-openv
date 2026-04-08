@@ -1,0 +1,52 @@
+spec_version: 1
+name: workplace_policy
+type: space
+runtime: fastapi
+app: server.app:app
+port: 8000
+description: >
+  A workplace policy compliance environment where agents classify employee
+  requests, decide approve or deny, cite policy evidence, and justify the
+  decision across easy, medium, and hard real-world HR and finance tasks.
+
+environment:
+  module: server.workplace_environment
+  class: WorkplaceEnvironment
+
+models:
+  action: models.WorkplaceAction
+  observation: models.WorkplaceObservation
+  reward: models.WorkplaceReward
+
+tasks:
+  - id: easy_leave_approval
+    difficulty: easy
+    objective: Approve or deny a routine annual leave request.
+    max_steps: 3
+    grader:
+      type: deterministic
+      range: [0.0, 1.0]
+
+  - id: medium_travel_approval
+    difficulty: medium
+    objective: Evaluate a domestic travel reimbursement against multiple limits.
+    max_steps: 3
+    grader:
+      type: deterministic
+      range: [0.0, 1.0]
+
+  - id: hard_expense_violation
+    difficulty: hard
+    objective: Detect a high-value expense claim with missing required evidence.
+    max_steps: 3
+    grader:
+      type: deterministic
+      range: [0.0, 1.0]
+
+reward:
+  range: [0.0, 1.0]
+  components:
+    classification: 0.25
+    decision: 0.35
+    cited_policy_evidence: 0.25
+    justification: 0.15
